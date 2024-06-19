@@ -250,8 +250,9 @@ function of {
         $install git-core autotools-dev pkg-config libc6-dev
     fi
     # was: git clone git://openflowswitch.org/openflow.git
-    # Use our own fork on github for now:
-    git clone https://github.com/mininet/openflow
+    # also was: git clone https://github.com/mininet/openflow
+    # Now we use our own (Elroy) fork on github:
+    git clone https://github.com/elroyair/openflow.git
     cd $BUILD_DIR/openflow
 
     # Patch controller to handle more than 16 switches

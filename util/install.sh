@@ -254,8 +254,6 @@ function of {
     # Now we use our own (Elroy) fork on github:
     git clone https://github.com/elroyair/openflow.git
     cd $BUILD_DIR/openflow
-    # @todo REMOVE THIS BEFORE MERGING TO MAIN
-    git checkout fix_strlcpy_bug
 
     # Patch controller to handle more than 16 switches
     patch -p1 < $MININET_DIR/mininet/util/openflow-patches/controller.patch

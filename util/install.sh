@@ -175,6 +175,13 @@ function mn_deps {
     else  # Debian/Ubuntu
         pf=pyflakes
         pep8=pep8
+        apt_others=""
+        pip_yes="1"
+        if [ "$DIST" = "Ubuntu" -a `expr $RELEASE '>=' 24.04` = "1" ]; then
+                pep8="${PYPKG}-pep8"
+                apt_others="${PYPKG}-pexpect"
+                pip_yes="0"
+        fi
         # Starting around 20.04, installing pyflakes instead of pyflakes3
         # causes Python 2 to be installed, which is exactly NOT what we want.
         if [ "$DIST" = "Ubuntu" -a `expr $RELEASE '>=' 20.04` = "1" ]; then
@@ -190,7 +197,7 @@ function mn_deps {
 
         $install gcc make socat psmisc xterm ssh iperf telnet \
                  ethtool help2man $pf pylint $pep8 \
-                 net-tools ${PYPKG}-tk
+                 net-tools ${PYPKG}-tk ${apt_others}
 
         # Install pip
         $install ${PYPKG}-pip || $install ${PYPKG}-pip-whl
@@ -203,7 +210,9 @@ function mn_deps {
             sudo ${PYTHON} get-pip.py
             rm get-pip.py
         fi
-       ${python} -m pip install pexpect
+        if [ "$pip_yes" = "1" ]; then
+            ${python} -m pip install pexpect
+        fi
         $install iproute2 || $install iproute
         $install cgroup-tools || $install cgroup-bin
         $install cgroupfs-mount
@@ -241,8 +250,9 @@ function of {
         $install git-core autotools-dev pkg-config libc6-dev
     fi
     # was: git clone git://openflowswitch.org/openflow.git
-    # Use our own fork on github for now:
-    git clone https://github.com/mininet/openflow
+    # also was: git clone https://github.com/mininet/openflow
+    # Now we use our own (Elroy) fork on github:
+    git clone https://github.com/elroyair/openflow.git
     cd $BUILD_DIR/openflow
 
     # Patch controller to handle more than 16 switches
